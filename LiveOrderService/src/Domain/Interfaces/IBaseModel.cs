@@ -1,4 +1,6 @@
-public interface IBaseModel
+namespace Domain.Interfaces
+{
+    public interface IBaseModel
 {
     public enum StatusOptions
     {
@@ -12,4 +14,5 @@ public interface IBaseModel
     public DateTime CreatedAt {get; init;}
     public DateTime? UpdatedAt {get; set;}
     public DateTime? DeletedAt {get; set;}
+}
 }

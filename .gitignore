@@ -1,0 +1,5 @@
+# Ignorar tudo nos diretórios
+**/*/
+
+# Não ignorar o .gitkeep
+!**/.gitkeep
