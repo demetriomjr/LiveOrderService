@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LiveOrderService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cfd18b63c5ab49c7063bcb7f2bf3a13e5231e0f5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9c7dc58ef32ef5033575f233de86cbe1b1ca4787")]
 [assembly: System.Reflection.AssemblyProductAttribute("LiveOrderService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LiveOrderService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
