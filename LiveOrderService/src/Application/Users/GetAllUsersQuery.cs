@@ -2,23 +2,16 @@ using Application.DTOs;
 using Application.Repositories;
 using MediatR;
 
-namespace Application.Users
+namespace LiveOrderService.src.Application.Users
 {
-    public record GetAllUsersQuery : IRequest<IEnumerable<UserDto>>;
+    public record GetAllUsersQuery : IRequest<IEnumerable<UserResponseDto>>;
 
-    public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, IEnumerable<UserDto>>
+    public class GetAllUsersQueryHandler(IUserRepository _userRepository) : IRequestHandler<GetAllUsersQuery, IEnumerable<UserResponseDto>>
     {
-        private readonly IUserRepository _userRepository;
-
-        public GetAllUsersQueryHandler(IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
-
-        public async Task<IEnumerable<UserDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<UserResponseDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
             var users = await _userRepository.GetAllAsync();
-            return users.Select(u => new UserDto(u));
+            return users.Select(u => new UserResponseDto(u));
         }
     }
 }

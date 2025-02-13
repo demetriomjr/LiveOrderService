@@ -1,9 +1,12 @@
 
+using Domain.Interfaces;
+
 namespace Domain.Orders
 {
-    public class OrderItem : IBaseModel
+    public class OrderItem(uint orderId) : IBaseModel
     {
         public uint Id { get; set; }
+        public uint OrderId {get; init;} = orderId;
         public IBaseModel.StatusOptions Status { get; set; } = IBaseModel.StatusOptions.ACTIVE;
         public required string Description { get; set; } 
         public decimal Value { get; set; } = 0;

@@ -10,8 +10,8 @@ namespace Domain.Users
         public uint Id { get; set; } = 0;
         public IBaseModel.StatusOptions Status { get; set; } = IBaseModel.StatusOptions.ACTIVE;
         public string Name { get; set; } = string.Empty;
-        public string Username { get; init; } = string.Empty;
-        public byte[] Password { get; init; } = [];
+        public string Username { get; set; } = string.Empty;
+        public byte[] Password { get; private set; } = [];
         public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; } = null;
         public DateTime? DeletedAt { get; set; } = null;
@@ -64,6 +64,11 @@ namespace Domain.Users
             }
             
             return true;
+        }
+
+        public void SetNewPassword(string newPassword)
+        {
+            Password = HashPassword(newPassword);
         }
     }
 }

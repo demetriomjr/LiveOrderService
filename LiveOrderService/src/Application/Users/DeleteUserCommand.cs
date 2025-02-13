@@ -5,15 +5,8 @@ namespace Application.Users
 {
     public record DeleteUserCommand(uint Id) : IRequest<int>;
 
-    public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, int>
+    public class DeleteUserCommandHandler(IUserRepository _userRepository) : IRequestHandler<DeleteUserCommand, int>
     {
-        private readonly IUserRepository _userRepository;
-
-        public DeleteUserCommandHandler(IUserRepository context)
-        {
-            _userRepository = context;
-        }
-
         public async Task<int> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetByIdAsync(request.Id);

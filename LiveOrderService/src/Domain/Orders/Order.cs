@@ -1,3 +1,4 @@
+using Domain.Interfaces;
 using Domain.Users;
 
 namespace Domain.Orders

@@ -4,21 +4,14 @@ using MediatR;
 
 namespace Application.Users
 {
-    public record GetUserByIdQuery(uint Id) : IRequest<UserDto?>;
+    public record GetUserByIdQuery(uint Id) : IRequest<UserResponseDto?>;
 
-    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto?>
+    public class GetUserByIdQueryHandler(IUserRepository _userRepository) : IRequestHandler<GetUserByIdQuery, UserResponseDto?>
     {
-        private readonly IUserRepository _userRepository;
-
-        public GetUserByIdQueryHandler(IUserRepository userRepository)
-        {
-            _userRepository = userRepository;
-        }
-
-        public async Task<UserDto?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+        public async Task<UserResponseDto?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetByIdAsync(request.Id);
-            return new UserDto(user);
+            return new UserResponseDto(user);
         }
     }
 }

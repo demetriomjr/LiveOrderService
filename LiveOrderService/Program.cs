@@ -1,3 +1,7 @@
+using Application.Users;
+using Common.Extensions;
+using LiveOrderService.src.Application.Users;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
@@ -8,36 +12,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-var users = app.MapGroup("/users");
-users.MapGet("/", () => 
+app.MapGroup("/api", userRoute =>
 {
-    return userService.GetUsers();
-});
-
-users.MapGet("/{id:uint}", (int id) => 
-{
-    return userService.GetUser(id);
-});
-
-users.MapGet("/{username:string}", (string username) => 
-{
-    return userService.GetUser(id);
-});
-
-users.MapPost("/", (User user) => 
-{
-    return userService.AddUser(user);
-});
-
-users.MapPut("/{id}", (int id, User user) => 
-{
-    return userService.UpdateUser(id, user);
-});
-
-users.MapDelete("/{id}", (int id) => 
-{
-    return userService.DeleteUser(id);
+    userRoute.MapGet("/", (GetAllUsersQueryHandler query) => query.Handle(new GetAllUsersQuery(), CancellationToken.None));
 });
 
 app.Run();
