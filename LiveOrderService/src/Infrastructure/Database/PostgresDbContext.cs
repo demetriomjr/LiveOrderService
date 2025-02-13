@@ -1,5 +1,5 @@
-using Domain.Orders;
-using Domain.Users;
+using LiveOrderService.Domain.Orders;
+using LiveOrderService.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace LiveOrderService.Infrastructure.Database

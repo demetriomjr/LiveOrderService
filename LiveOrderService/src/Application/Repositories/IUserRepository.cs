@@ -1,16 +1,16 @@
-using Domain.Users;
+using LiveOrderService.Domain.Users;
 
-namespace Application.Repositories
+namespace LiveOrderService.Application.Repositories
 {
     public interface IUserRepository
     {
         Task<IEnumerable<User>> GetAllAsync();
 
-        Task<User> GetByIdAsync(uint id);
+        Task<User?> GetByIdAsync(uint id);
 
-        Task<User> GetByUsernameAsync(string username);
+        Task<User?> GetByUsernameAsync(string username);
 
-        Task<User> AddAsync(User user);
+        Task<User?> AddAsync(User user);
 
         Task<int> UpdateAsync(User user);
 

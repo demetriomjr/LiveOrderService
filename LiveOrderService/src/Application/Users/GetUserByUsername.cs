@@ -1,8 +1,8 @@
-using Application.DTOs;
-using Application.Repositories;
+using LiveOrderService.Application.DTOs;
+using LiveOrderService.Application.Repositories;
 using MediatR;
 
-namespace Application.Users
+namespace LiveOrderService.Application.Users
 {
     public record GetUserByUsernameQuery(string Username) : IRequest<UserResponseDto?>;
 

@@ -1,9 +1,9 @@
 
 using System.Security.Cryptography;
 using System.Text;
-using Domain.Interfaces;
+using LiveOrderService.Domain.Interfaces;
 
-namespace Domain.Users
+namespace LiveOrderService.Domain.Users
 {
     public class User : IBaseModel
     {

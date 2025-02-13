@@ -1,9 +1,9 @@
-using Application.DTOs;
-using Application.Repositories;
-using Domain.Users;
+using LiveOrderService.Application.DTOs;
+using LiveOrderService.Application.Repositories;
+using LiveOrderService.Domain.Users;
 using MediatR;
 
-namespace Application.Users
+namespace LiveOrderService.Application.Users
 {
     public record CreateUserCommand(string Username, string Password) : IRequest<UserResponseDto?>;
 
@@ -13,7 +13,7 @@ namespace Application.Users
         {
             var user = new User(request.Username, request.Password);
             var result = await _userRepository.AddAsync(user);
-            return new UserResponseDto(result);
+            return result is null ? null : new UserResponseDto(result);
         }
     }
 }

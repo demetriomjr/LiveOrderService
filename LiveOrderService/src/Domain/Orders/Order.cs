@@ -1,7 +1,7 @@
-using Domain.Interfaces;
-using Domain.Users;
+using LiveOrderService.Domain.Interfaces;
+using LiveOrderService.Domain.Users;
 
-namespace Domain.Orders
+namespace LiveOrderService.Domain.Orders
 {
     public class Order : IBaseModel
     {

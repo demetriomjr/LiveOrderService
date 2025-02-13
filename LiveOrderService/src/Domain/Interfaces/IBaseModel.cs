@@ -1,4 +1,4 @@
-namespace Domain.Interfaces
+namespace LiveOrderService.Domain.Interfaces
 {
     public interface IBaseModel
 {

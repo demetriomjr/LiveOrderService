@@ -1,5 +1,5 @@
-using Application.Users;
-using Common.Extensions;
+using LiveOrderService.Application.Users;
+using LiveOrderService.Common.Extensions;
 using LiveOrderService.src.Application.Users;
 
 var builder = WebApplication.CreateBuilder(args);

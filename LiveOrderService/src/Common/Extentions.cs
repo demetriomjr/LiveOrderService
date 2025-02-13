@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
 
-namespace Common.Extensions
+namespace LiveOrderService.Common.Extensions
 {
     public static class Extensions
     {

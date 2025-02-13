@@ -1,6 +1,6 @@
-using Domain.Users;
+using LiveOrderService.Domain.Users;
 
-namespace Application.DTOs 
+namespace LiveOrderService.Application.DTOs 
 {
     public class UserResponseDto
     {

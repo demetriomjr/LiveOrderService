@@ -1,7 +1,7 @@
-using Application.Repositories;
+using LiveOrderService.Application.Repositories;
 using MediatR;
 
-namespace Application.Users
+namespace LiveOrderService.Application.Users
 {
     public record DeleteUserCommand(uint Id) : IRequest<int>;
 

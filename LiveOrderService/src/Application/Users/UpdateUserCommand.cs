@@ -1,7 +1,7 @@
-using Application.Repositories;
+using LiveOrderService.Application.Repositories;
 using MediatR;
 
-namespace Application.Users
+namespace LiveOrderService.Application.Users
 {
     public record UpdateUserCommand(uint Id, string username, string password) : IRequest<int>;
 

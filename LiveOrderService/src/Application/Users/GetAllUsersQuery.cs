@@ -1,5 +1,5 @@
-using Application.DTOs;
-using Application.Repositories;
+using LiveOrderService.Application.DTOs;
+using LiveOrderService.Application.Repositories;
 using MediatR;
 
 namespace LiveOrderService.src.Application.Users

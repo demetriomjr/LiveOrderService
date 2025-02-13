@@ -1,7 +1,7 @@
 
-using Domain.Interfaces;
+using LiveOrderService.Domain.Interfaces;
 
-namespace Domain.Orders
+namespace LiveOrderService.Domain.Orders
 {
     public class OrderItem(uint orderId) : IBaseModel
     {
