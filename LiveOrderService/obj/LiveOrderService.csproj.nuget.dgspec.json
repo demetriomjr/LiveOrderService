@@ -51,6 +51,14 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "CSharpFunctionalExtensions": {
+              "target": "Package",
+              "version": "[3.5.1, )"
+            },
+            "LanguageExt.Core": {
+              "target": "Package",
+              "version": "[4.4.9, )"
+            },
             "MediatR": {
               "target": "Package",
               "version": "[12.4.1, )"
@@ -66,6 +74,10 @@
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.2, )"
+            },
+            "OneOf": {
+              "target": "Package",
+              "version": "[3.0.271, )"
             }
           },
           "imports": [

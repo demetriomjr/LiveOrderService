@@ -1,17 +1,24 @@
+using CSharpFunctionalExtensions;
 using LiveOrderService.Application.DTOs;
 using LiveOrderService.Application.Repositories;
 using MediatR;
 
 namespace LiveOrderService.src.Application.Users
 {
-    public record GetAllUsersQuery : IRequest<IEnumerable<UserResponseDto>>;
+    public record GetAllUsersQuery : IRequest<Result<IEnumerable<UserResponseDto>>>;
 
-    public class GetAllUsersQueryHandler(IUserRepository _userRepository) : IRequestHandler<GetAllUsersQuery, IEnumerable<UserResponseDto>>
+    public class GetAllUsersQueryHandler(IUserRepository _userRepository) : IRequestHandler<GetAllUsersQuery, Result<IEnumerable<UserResponseDto>>>
     {
-        public async Task<IEnumerable<UserResponseDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<UserResponseDto>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
-            var users = await _userRepository.GetAllAsync();
-            return users.Select(u => new UserResponseDto(u));
+            var result = await _userRepository.GetAllAsync();
+            if(result.Value is IEnumerable<UserResponseDto> users)
+                return Result.Success(users);
+
+            if(result.Value is string error)
+                return Result.Failure<IEnumerable<UserResponseDto>>(error);
+
+            return Result.Failure<IEnumerable<UserResponseDto>>("An error occurred while fetching all users.");
         }
     }
 }

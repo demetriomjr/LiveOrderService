@@ -1,17 +1,25 @@
+using CSharpFunctionalExtensions;
 using LiveOrderService.Application.DTOs;
 using LiveOrderService.Application.Repositories;
 using MediatR;
 
 namespace LiveOrderService.Application.Users
 {
-    public record GetUserByIdQuery(uint Id) : IRequest<UserResponseDto?>;
+    public record GetUserByIdQuery(uint Id) : IRequest<Result<UserResponseDto>>;
 
-    public class GetUserByIdQueryHandler(IUserRepository _userRepository) : IRequestHandler<GetUserByIdQuery, UserResponseDto?>
+    public class GetUserByIdQueryHandler(IUserRepository _userRepository) : IRequestHandler<GetUserByIdQuery, Result<UserResponseDto>>
     {
-        public async Task<UserResponseDto?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<UserResponseDto>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByIdAsync(request.Id);
-            return new UserResponseDto(user);
+            var result = await _userRepository.GetByIdAsync(request.Id);
+            
+            if(result.Value is string error)
+                return Result.Failure<UserResponseDto>(error);
+
+            if(result.Value is UserResponseDto user)
+                return Result.Success(user);
+            
+            return Result.Failure<UserResponseDto>("Error getting user by id");
         }
     }
 }

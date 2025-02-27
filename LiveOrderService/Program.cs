@@ -1,3 +1,4 @@
+using LiveOrderService.Application.DTOs;
 using LiveOrderService.Application.Users;
 using LiveOrderService.Common.Extensions;
 using LiveOrderService.src.Application.Users;
@@ -19,51 +20,99 @@ app.MapGroup("/user", userRoute =>
     userRoute.MapGet("/", async (IMediator mediator, CancellationToken ct) => 
     {
         var query = new GetAllUsersQuery();
-        return await mediator.Send(query, ct);
+        var result = await mediator.Send(query, ct);
+
+        if(result.IsFailure)
+            return Results.BadRequest(result.Error);
+        
+        if(result.Value is IEnumerable<UserResponseDto> users)
+            return Results.Ok(users);
+
+        return Results.InternalServerError();
     });
 
     userRoute.MapGet("/{id:uint}", async (IMediator mediator, uint id, CancellationToken ct) => 
     {
         var query = new GetUserByIdQuery(id);
-        return await mediator.Send(query, ct);
+        var result = await mediator.Send(query, ct);
+
+        if(result.IsFailure)
+            return Results.BadRequest(result.Error);    
+        
+        if(result.Value is UserResponseDto user)
+            return Results.Ok(user);
+
+        return Results.InternalServerError();
     });
 
     userRoute.MapGet("/{username:string}", async (IMediator mediator, string username, CancellationToken ct) => 
     {
         var query = new GetUserByUsernameQuery(username);
-        return await mediator.Send(query, ct);
+        var result = await mediator.Send(query, ct);
+
+        if(result.IsFailure)
+            return Results.BadRequest(result.Error);    
+        
+        if(result.Value is UserResponseDto user)
+            return Results.Ok(user);
+
+        return Results.InternalServerError();
     });
 
     userRoute.MapPost("/", async (IMediator mediator, CancellationToken ct, [FromBody]CreateUserCommand command) => 
     {
         var result = await mediator.Send(command, ct);
 
-        if(result is null)
-            return Results.BadRequest("error while creating new user");
+        if(result.IsFailure)
+            return Results.BadRequest(result.Error);
 
-        return Results.Created($"/users/{result.Id}", result);
+        if(result.Value is UserResponseDto  createdUser)
+            return Results.Created($"/users/{createdUser.Id}", createdUser);
+        
+        return Results.InternalServerError();
     });
 
     userRoute.MapPut("/", async (IMediator mediator, CancellationToken ct, [FromBody]UpdateUserCommand command) => 
     {
         var result = await mediator.Send(command, ct);
-        return Results.Ok($"Return status code of {result}");
+        
+        if(result.IsFailure)
+            return Results.BadRequest(result.Error);    
+        
+        if(result.IsSuccess)
+            return Results.Ok(result.Value);
+
+        return Results.InternalServerError();
     });
 
     userRoute.MapPut("/{id:uint}", async (IMediator mediator, CancellationToken ct, uint id, [FromBody]UpdateUserCommand command) => 
     {
         if(!command.Id.Equals(id))
-            return Results.BadRequest("Conflict of Id values");
+            return Results.BadRequest("Conflict of ID values");
 
         var result = await mediator.Send(command, ct);
-        return Results.Ok($"Return status code of {result}");
+        
+        if(result.IsFailure)
+            return Results.BadRequest(result.Error);    
+        
+        if(result.IsSuccess)
+            return Results.Ok(result.Value);
+
+        return Results.InternalServerError();
     });
 
     userRoute.MapDelete("/{id:uint}", async (IMediator mediator, uint id, CancellationToken ct) => 
     {
         var command = new DeleteUserCommand(id);
         var result = await mediator.Send(command, ct);
-        return Results.Ok($"Return status code of {result}");
+        
+        if(result.IsFailure)
+            return Results.BadRequest(result.Error);
+        
+        if(result.IsSuccess)
+            return Results.Ok(result.Value);
+
+        return Results.InternalServerError();
     });
 
 });
