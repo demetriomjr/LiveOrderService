@@ -1,4 +1,4 @@
-using CSharpFunctionalExtensions;
+using LanguageExt.Common;
 using LiveOrderService.Application.Repositories;
 using LiveOrderService.Domain.Users;
 using MediatR;
@@ -13,28 +13,27 @@ namespace LiveOrderService.Application.Users
         {
             var FetchedUser = await _userRepository.GetByIdAsync(request.Id);
             
-            if(FetchedUser.Value is string error)
-                return Result.Failure<bool>(error);
+            await FetchedUser.Match(
+                async (user) =>
+                {
+                    if(!string.IsNullOrEmpty(request.username))
+                        user.Username = request.username;
+                    if(!string.IsNullOrEmpty(request.password))
+                        user.SetNewPassword(request.password);
 
-            if(FetchedUser.Value is User user)
-            {
-                if(!string.IsNullOrEmpty(request.username))
-                    user.Username = request.username;
-                if(!string.IsNullOrEmpty(request.password))
-                    user.SetNewPassword(request.password);
+                    var result = await _userRepository.UpdateAsync(user);
 
-                var result = await _userRepository.UpdateAsync(user);
+                    result.Match(
+                        _ => new Result<bool>(true),
+                        ex => new Result<bool>(ex)
+                    );
 
-                if(result.IsSuccess)
-                    return Result.Success(true);
-                
-                if(result.IsFailure)
-                    return Result.Failure<bool>(result.Error);
-                
-                return Result.Failure<bool>("An error occurred while updating the user.");
-            }
-            
-            return Result.Failure<bool>("An error occurred while updating the user.");
+                    return new Result<bool>(new Exception("An error occurred while updating the user."));
+                },
+                error => Task.FromResult(new Result<bool>(error))
+            );
+           
+            return new Result<bool>(new Exception("An error occurred while updating the user."));
         }
     }
 }

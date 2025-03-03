@@ -2,15 +2,18 @@
   "version": 3,
   "targets": {
     "net9.0": {
-      "CSharpFunctionalExtensions/3.5.1": {
+      "JWT/11.0.0": {
         "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
         "compile": {
-          "lib/net8.0/CSharpFunctionalExtensions.dll": {
+          "lib/net8.0/JWT.dll": {
             "related": ".pdb;.xml"
           }
         },
         "runtime": {
-          "lib/net8.0/CSharpFunctionalExtensions.dll": {
+          "lib/net8.0/JWT.dll": {
             "related": ".pdb;.xml"
           }
         }
@@ -343,6 +346,19 @@
         "runtime": {
           "lib/netstandard2.0/Microsoft.OpenApi.dll": {
             "related": ".pdb;.xml"
+          }
+        }
+      },
+      "Newtonsoft.Json/13.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
           }
         }
       },
@@ -712,24 +728,37 @@
     }
   },
   "libraries": {
-    "CSharpFunctionalExtensions/3.5.1": {
-      "sha512": "J9wNzOzRdc4pfO3WREYR19zjp585y7/y9TKQXKkbxxnXt7N6h2Q8AjP0+bayrgRVxpU9COaFMA8961xbptYsUg==",
+    "JWT/11.0.0": {
+      "sha512": "jOT1PA95jgf78CqWsKt8hz9Uzv4J39vukzf5nYtfky9N6wl1W4vIXT1CdkQI7zG20HnApEMtmpC/pMtCKr4rvw==",
       "type": "package",
-      "path": "csharpfunctionalextensions/3.5.1",
+      "path": "jwt/11.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "csharpfunctionalextensions.3.5.1.nupkg.sha512",
-        "csharpfunctionalextensions.nuspec",
-        "lib/net6.0/CSharpFunctionalExtensions.dll",
-        "lib/net6.0/CSharpFunctionalExtensions.pdb",
-        "lib/net6.0/CSharpFunctionalExtensions.xml",
-        "lib/net8.0/CSharpFunctionalExtensions.dll",
-        "lib/net8.0/CSharpFunctionalExtensions.pdb",
-        "lib/net8.0/CSharpFunctionalExtensions.xml",
-        "lib/netstandard2.0/CSharpFunctionalExtensions.dll",
-        "lib/netstandard2.0/CSharpFunctionalExtensions.pdb",
-        "lib/netstandard2.0/CSharpFunctionalExtensions.xml"
+        "README.md",
+        "jwt.11.0.0.nupkg.sha512",
+        "jwt.nuspec",
+        "lib/net35/JWT.dll",
+        "lib/net35/JWT.pdb",
+        "lib/net35/JWT.xml",
+        "lib/net40/JWT.dll",
+        "lib/net40/JWT.pdb",
+        "lib/net40/JWT.xml",
+        "lib/net462/JWT.dll",
+        "lib/net462/JWT.pdb",
+        "lib/net462/JWT.xml",
+        "lib/net6.0/JWT.dll",
+        "lib/net6.0/JWT.pdb",
+        "lib/net6.0/JWT.xml",
+        "lib/net8.0/JWT.dll",
+        "lib/net8.0/JWT.pdb",
+        "lib/net8.0/JWT.xml",
+        "lib/netstandard1.3/JWT.dll",
+        "lib/netstandard1.3/JWT.pdb",
+        "lib/netstandard1.3/JWT.xml",
+        "lib/netstandard2.0/JWT.dll",
+        "lib/netstandard2.0/JWT.pdb",
+        "lib/netstandard2.0/JWT.xml"
       ]
     },
     "LanguageExt.Core/4.4.9": {
@@ -1276,6 +1305,36 @@
         "lib/netstandard2.0/Microsoft.OpenApi.xml",
         "microsoft.openapi.1.6.17.nupkg.sha512",
         "microsoft.openapi.nuspec"
+      ]
+    },
+    "Newtonsoft.Json/13.0.3": {
+      "sha512": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/net6.0/Newtonsoft.Json.dll",
+        "lib/net6.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
+        "newtonsoft.json.13.0.3.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
       ]
     },
     "OneOf/3.0.271": {
@@ -2873,13 +2932,13 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
-      "CSharpFunctionalExtensions >= 3.5.1",
       "LanguageExt.Core >= 4.4.9",
       "MediatR >= 12.4.1",
       "MediatR.Extensions.Microsoft.DependencyInjection >= 11.1.0",
       "Microsoft.AspNetCore.OpenApi >= 9.0.0",
       "Microsoft.EntityFrameworkCore >= 9.0.2",
-      "OneOf >= 3.0.271"
+      "OneOf >= 3.0.271",
+      "jwt >= 11.0.0"
     ]
   },
   "packageFolders": {
@@ -2933,10 +2992,6 @@
       "net9.0": {
         "targetAlias": "net9.0",
         "dependencies": {
-          "CSharpFunctionalExtensions": {
-            "target": "Package",
-            "version": "[3.5.1, )"
-          },
           "LanguageExt.Core": {
             "target": "Package",
             "version": "[4.4.9, )"
@@ -2960,6 +3015,10 @@
           "OneOf": {
             "target": "Package",
             "version": "[3.0.271, )"
+          },
+          "jwt": {
+            "target": "Package",
+            "version": "[11.0.0, )"
           }
         },
         "imports": [

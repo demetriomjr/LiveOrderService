@@ -1,4 +1,4 @@
-using CSharpFunctionalExtensions;
+using LanguageExt.Common;
 using LiveOrderService.Application.DTOs;
 using LiveOrderService.Application.Repositories;
 using MediatR;
@@ -12,13 +12,13 @@ namespace LiveOrderService.src.Application.Users
         public async Task<Result<IEnumerable<UserResponseDto>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
             var result = await _userRepository.GetAllAsync();
-            if(result.Value is IEnumerable<UserResponseDto> users)
-                return Result.Success(users);
+            
+            result.Match(
+                users =>  new Result<IEnumerable<UserResponseDto>>(users.Select(user => new UserResponseDto(user))),
+                error => new Result<IEnumerable<UserResponseDto>>(error)
+            );
 
-            if(result.Value is string error)
-                return Result.Failure<IEnumerable<UserResponseDto>>(error);
-
-            return Result.Failure<IEnumerable<UserResponseDto>>("An error occurred while fetching all users.");
+            return new Result<IEnumerable<UserResponseDto>>( new Exception("An error occurred while fetching all users."));
         }
     }
 }

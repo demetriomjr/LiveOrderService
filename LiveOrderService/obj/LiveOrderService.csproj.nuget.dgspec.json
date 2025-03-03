@@ -51,10 +51,6 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
-            "CSharpFunctionalExtensions": {
-              "target": "Package",
-              "version": "[3.5.1, )"
-            },
             "LanguageExt.Core": {
               "target": "Package",
               "version": "[4.4.9, )"
@@ -78,6 +74,10 @@
             "OneOf": {
               "target": "Package",
               "version": "[3.0.271, )"
+            },
+            "jwt": {
+              "target": "Package",
+              "version": "[11.0.0, )"
             }
           },
           "imports": [

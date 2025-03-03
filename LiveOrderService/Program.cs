@@ -1,4 +1,4 @@
-using LiveOrderService.Application.DTOs;
+using LiveOrderService.Application.Authentication;
 using LiveOrderService.Application.Users;
 using LiveOrderService.Common.Extensions;
 using LiveOrderService.src.Application.Users;
@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
+builder.Services.AddMediatR(typeof(Program).Assembly);
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
@@ -22,11 +23,10 @@ app.MapGroup("/user", userRoute =>
         var query = new GetAllUsersQuery();
         var result = await mediator.Send(query, ct);
 
-        if(result.IsFailure)
-            return Results.BadRequest(result.Error);
-        
-        if(result.Value is IEnumerable<UserResponseDto> users)
-            return Results.Ok(users);
+        result.Match(
+            users => Results.Ok(users),
+            error => Results.BadRequest(error)
+        );
 
         return Results.InternalServerError();
     });
@@ -36,11 +36,10 @@ app.MapGroup("/user", userRoute =>
         var query = new GetUserByIdQuery(id);
         var result = await mediator.Send(query, ct);
 
-        if(result.IsFailure)
-            return Results.BadRequest(result.Error);    
-        
-        if(result.Value is UserResponseDto user)
-            return Results.Ok(user);
+        result.Match(
+            user => Results.Ok(user),
+            error => Results.BadRequest(error)
+        );
 
         return Results.InternalServerError();
     });
@@ -50,11 +49,10 @@ app.MapGroup("/user", userRoute =>
         var query = new GetUserByUsernameQuery(username);
         var result = await mediator.Send(query, ct);
 
-        if(result.IsFailure)
-            return Results.BadRequest(result.Error);    
-        
-        if(result.Value is UserResponseDto user)
-            return Results.Ok(user);
+        result.Match(
+            user => Results.Ok(user),
+            error => Results.BadRequest(error)
+        );
 
         return Results.InternalServerError();
     });
@@ -63,11 +61,10 @@ app.MapGroup("/user", userRoute =>
     {
         var result = await mediator.Send(command, ct);
 
-        if(result.IsFailure)
-            return Results.BadRequest(result.Error);
-
-        if(result.Value is UserResponseDto  createdUser)
-            return Results.Created($"/users/{createdUser.Id}", createdUser);
+        result.Match(
+            user => Results.Created($"/user/{user.Id}", user),
+            error => Results.BadRequest(error)
+        );
         
         return Results.InternalServerError();
     });
@@ -76,11 +73,10 @@ app.MapGroup("/user", userRoute =>
     {
         var result = await mediator.Send(command, ct);
         
-        if(result.IsFailure)
-            return Results.BadRequest(result.Error);    
-        
-        if(result.IsSuccess)
-            return Results.Ok(result.Value);
+        result.Match(
+            user => Results.Ok(),
+            error => Results.BadRequest(error)
+        );
 
         return Results.InternalServerError();
     });
@@ -92,11 +88,10 @@ app.MapGroup("/user", userRoute =>
 
         var result = await mediator.Send(command, ct);
         
-        if(result.IsFailure)
-            return Results.BadRequest(result.Error);    
-        
-        if(result.IsSuccess)
-            return Results.Ok(result.Value);
+        result.Match(
+            user => Results.Ok(),
+            error => Results.BadRequest(error)
+        );
 
         return Results.InternalServerError();
     });
@@ -106,15 +101,44 @@ app.MapGroup("/user", userRoute =>
         var command = new DeleteUserCommand(id);
         var result = await mediator.Send(command, ct);
         
-        if(result.IsFailure)
-            return Results.BadRequest(result.Error);
-        
-        if(result.IsSuccess)
-            return Results.Ok(result.Value);
+        result.Match(
+            user => Results.NoContent(),
+            error => Results.BadRequest(error)
+        );
 
         return Results.InternalServerError();
     });
 
+});
+
+app.MapGroup("/authenticate", authRoute => {
+    authRoute.MapPost("/", async (IMediator mediator, CancellationToken ct, 
+    [AsParameters]string username, [AsParameters]string password, [AsParameters]string personalKey) => 
+    {
+        var command = new AuthenticateUserCommand(username, password, personalKey);
+        var result = await mediator.Send(command, ct);
+
+        result.Match(
+            authResponse => Results.Ok(authResponse),
+            error => Results.BadRequest(error)
+        );
+
+        return Results.InternalServerError();
+    });
+
+    authRoute.MapGet("/{token:string}", async (IMediator mediator, CancellationToken ct,
+    string token, [AsParameters]string personalKey) => 
+    {
+        var query = new ValidateTokenQuery(token, personalKey);
+        var result = await mediator.Send(query, ct);
+
+        result.Match(
+            newToken => Results.Ok(newToken),
+            error => Results.BadRequest(error)
+        );
+
+        return Results.InternalServerError();
+    });
 });
 
 app.Run();

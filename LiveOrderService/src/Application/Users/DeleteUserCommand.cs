@@ -1,4 +1,4 @@
-using CSharpFunctionalExtensions;
+using LanguageExt.Common;
 using LiveOrderService.Application.Repositories;
 using MediatR;
 
@@ -10,15 +10,14 @@ namespace LiveOrderService.Application.Users
     {
         public async Task<Result<bool>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            var deleteResult = await _userRepository.DeleteAsync(request.Id);
+            var result = await _userRepository.DeleteAsync(request.Id);
                 
-            if(deleteResult.IsFailure)
-                return Result.Failure<bool>(deleteResult.Error);        
+            result.Match(
+                _ => new Result<bool>(true),
+                ex => new Result<bool>(ex)
+            );
 
-            if(deleteResult.IsSuccess)
-                return Result.Success(true);
-            
-            return Result.Failure<bool>("An error occurred while deleting the user");
+            return new Result<bool>(new Exception("An error has occured while trying to delete the user"));
         }
     }
 }

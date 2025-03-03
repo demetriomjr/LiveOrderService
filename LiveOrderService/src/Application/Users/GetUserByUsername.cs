@@ -1,4 +1,4 @@
-using CSharpFunctionalExtensions;
+using LanguageExt.Common;
 using LiveOrderService.Application.DTOs;
 using LiveOrderService.Application.Repositories;
 using MediatR;
@@ -13,13 +13,12 @@ namespace LiveOrderService.Application.Users
         {
             var result = await _userRepository.GetByUsernameAsync(request.Username);
             
-            if(result.Value is string error)
-                return Result.Failure<UserResponseDto>(error);
+            result.Match(
+                user => new Result<UserResponseDto>(new UserResponseDto(user)),
+                error => new Result<UserResponseDto>(error)
+            );
             
-            if(result.Value is UserResponseDto user)
-                return Result.Success(user);
-            
-            return Result.Failure<UserResponseDto>("An error occurred while fetching the user.");
+            return new Result<UserResponseDto>(new Exception("An error occurred while fetching the user."));
         }
     }
 }

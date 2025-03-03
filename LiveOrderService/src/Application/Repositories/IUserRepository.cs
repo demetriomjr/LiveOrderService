@@ -1,18 +1,17 @@
-using CSharpFunctionalExtensions;
+using LanguageExt.Common;
 using LiveOrderService.Domain.Users;
-using OneOf;
 
 namespace LiveOrderService.Application.Repositories
 {
     public interface IUserRepository
     {
-        Task<OneOf<IEnumerable<User>, string>> GetAllAsync();
+        Task<Result<IEnumerable<User>>> GetAllAsync();
 
-        Task<OneOf<User, string>> GetByIdAsync(uint id);
+        Task<Result<User>> GetByIdAsync(uint id);
 
-        Task<OneOf<User, string>> GetByUsernameAsync(string username);
+        Task<Result<User>> GetByUsernameAsync(string username);
 
-        Task<OneOf<User, string>> AddAsync(User user);
+        Task<Result<User>> AddAsync(User user);
 
         Task<Result<bool>> UpdateAsync(User user);
         

@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "ZZnAu8H0CpQ=",
+  "dgSpecHash": "SXURWnYPq1c=",
   "success": true,
   "projectFilePath": "C:\\Users\\dm3o\\OneDrive\\Documentos\\VS Projects\\LiveOrderService\\LiveOrderService\\LiveOrderService.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\dm3o\\.nuget\\packages\\csharpfunctionalextensions\\3.5.1\\csharpfunctionalextensions.3.5.1.nupkg.sha512",
+    "C:\\Users\\dm3o\\.nuget\\packages\\jwt\\11.0.0\\jwt.11.0.0.nupkg.sha512",
     "C:\\Users\\dm3o\\.nuget\\packages\\languageext.core\\4.4.9\\languageext.core.4.4.9.nupkg.sha512",
     "C:\\Users\\dm3o\\.nuget\\packages\\mediatr\\12.4.1\\mediatr.12.4.1.nupkg.sha512",
     "C:\\Users\\dm3o\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
@@ -26,6 +26,7 @@
     "C:\\Users\\dm3o\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\dm3o\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\dm3o\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512",
+    "C:\\Users\\dm3o\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\dm3o\\.nuget\\packages\\oneof\\3.0.271\\oneof.3.0.271.nupkg.sha512",
     "C:\\Users\\dm3o\\.nuget\\packages\\system.collections\\4.3.0\\system.collections.4.3.0.nupkg.sha512",
     "C:\\Users\\dm3o\\.nuget\\packages\\system.diagnostics.contracts\\4.3.0\\system.diagnostics.contracts.4.3.0.nupkg.sha512",
