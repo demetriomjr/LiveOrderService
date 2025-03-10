@@ -1,0 +1,7 @@
+{
+  "POSTGRES_DB": "live_order",
+  "POSTGRES_USER": "root",
+  "POSTGRES_PASSWORD": "sdf654swer54cvx321ewr56423423sd1fds584dfssddfs",
+  "POSTGRES_IP": "127.0.0.1",
+  "REDIS_IP": "127.0.0.1"
+}

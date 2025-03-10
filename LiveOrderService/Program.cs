@@ -8,14 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddMediatR(typeof(Program).Assembly);
+builder.Services.AddDockerConfiguration();
 
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
+if (app.Environment.IsDevelopment()) app.MapOpenApi();
 app.UseHttpsRedirection();
+
 app.MapGroup("/user", userRoute =>
 {
     userRoute.MapGet("/", async (IMediator mediator, CancellationToken ct) => 
@@ -110,13 +108,13 @@ app.MapGroup("/user", userRoute =>
     });
 
 });
-
-app.MapGroup("/authenticate", authRoute => {
-    authRoute.MapPost("/", async (IMediator mediator, CancellationToken ct, 
+app.MapGroup("/authentication", authRoute => 
+{
+    authRoute.MapGet("/validate_user", async (IMediator mediator, CancellationToken ct, 
     [AsParameters]string username, [AsParameters]string password, [AsParameters]string personalKey) => 
     {
-        var command = new AuthenticateUserCommand(username, password, personalKey);
-        var result = await mediator.Send(command, ct);
+        var query = new AuthenticateUserQuery(username, password, personalKey);
+        var result = await mediator.Send(query, ct);
 
         result.Match(
             authResponse => Results.Ok(authResponse),
@@ -126,10 +124,24 @@ app.MapGroup("/authenticate", authRoute => {
         return Results.InternalServerError();
     });
 
-    authRoute.MapGet("/{token:string}", async (IMediator mediator, CancellationToken ct,
-    string token, [AsParameters]string personalKey) => 
+    authRoute.MapGet("/validate_token", async (IMediator mediator, CancellationToken ct,
+    [AsParameters]string token, [AsParameters]string personalKey) => 
     {
         var query = new ValidateTokenQuery(token, personalKey);
+        var result = await mediator.Send(query, ct);
+
+        result.Match(
+            newToken => Results.Ok(newToken),
+            error => Results.BadRequest(error)
+        );
+
+        return Results.InternalServerError();
+    });
+
+    authRoute.MapGet("/refresh_token", async (IMediator mediator, CancellationToken ct,
+    [AsParameters]string token, [AsParameters]string personalKey) => 
+    {
+        var query = new RefreshTokenQuery(token, personalKey);
         var result = await mediator.Send(query, ct);
 
         result.Match(

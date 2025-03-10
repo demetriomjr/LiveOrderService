@@ -5,11 +5,11 @@ using MediatR;
 
 namespace LiveOrderService.Application.Authentication
 {
-    public record AuthenticateUserCommand(string Username, string Password, string PersonalKey) : IRequest<Result<AuthResponse>>;
+    public record AuthenticateUserQuery(string Username, string Password, string PersonalKey) : IRequest<Result<AuthResponse>>;
 
-    public class AuthenticateUserCommandHandler(IAuthRepository _authRepository) : IRequestHandler<AuthenticateUserCommand, Result<AuthResponse>>
+    public class AuthenticateUserQueryHandler(IAuthRepository _authRepository) : IRequestHandler<AuthenticateUserQuery, Result<AuthResponse>>
     {
-        public async Task<Result<AuthResponse>> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result<AuthResponse>> Handle(AuthenticateUserQuery request, CancellationToken cancellationToken)
         {
             var result = await _authRepository.AuthenticateUserAsync(request.Username, request.Password, request.PersonalKey);
 

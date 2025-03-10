@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveOrderService", "LiveOrderService\LiveOrderService.csproj", "{73DC0351-9162-4851-B4B9-19D19AA4541A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveOrderService.Test", "LiveOrderService.Test\LiveOrderService.Test.csproj", "{26CBE1D6-30B7-4D04-9020-65C396EA867C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{73DC0351-9162-4851-B4B9-19D19AA4541A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73DC0351-9162-4851-B4B9-19D19AA4541A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73DC0351-9162-4851-B4B9-19D19AA4541A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26CBE1D6-30B7-4D04-9020-65C396EA867C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26CBE1D6-30B7-4D04-9020-65C396EA867C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26CBE1D6-30B7-4D04-9020-65C396EA867C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26CBE1D6-30B7-4D04-9020-65C396EA867C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

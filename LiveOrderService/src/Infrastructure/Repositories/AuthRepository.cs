@@ -36,8 +36,8 @@ namespace LiveOrderService.Infrastructure.Repositories
                 return new Result<AuthResponse>(new AuthenticationException("Please use a new different personal key"));
             }
 
-            var token = GenerateToken(fetchedUser.Username, personalKey, 30);
-            var refreshToken = GenerateToken(fetchedUser.Username, personalKey, 60*4);
+            var token = GenerateToken(personalKey, "comsumer_token", 30);
+            var refreshToken = GenerateToken(personalKey, "refresh_token", 60*4);
 
             if(token is null || refreshToken is null)
             {
@@ -48,15 +48,14 @@ namespace LiveOrderService.Infrastructure.Repositories
             return new AuthResponse(token, refreshToken);
         }
 
-        private string GenerateToken(string username, string personalKey, int minutes)
+        private string GenerateToken(string personalKey, string tokenType, int minutes)
         {
             var token = new JwtBuilder()
                 .WithAlgorithm(new HMACSHA256Algorithm())
                 .WithSecret(personalKey)
                 .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(minutes).ToUnixTimeSeconds())
-                .AddClaim("username", username)
+                .AddClaim("type", tokenType)
                 .Encode();
-
 
             if(token is null)
             {
@@ -67,7 +66,7 @@ namespace LiveOrderService.Infrastructure.Repositories
             return token;
         }
 
-        public async Task<Result<string>> ValidateTokenAsync(string token, string personalKey)
+        private IDictionary<string, string> DecodeToken(string token, string personalKey)
         {
             var decodedToken = new JwtBuilder()
                 .WithSecret(personalKey)
@@ -77,56 +76,66 @@ namespace LiveOrderService.Infrastructure.Repositories
             if(decodedToken is null)
             {
                 _logger.LogError("Invalid token");
-                return new Result<string>(new AuthenticationException("Invalid token"));
+                return null!;
             }
 
-            if(!decodedToken.TryGetValue("exp", out var exp) || !decodedToken.TryGetValue("username", out var username))
+            return decodedToken;
+        }
+
+        private string ValidateTokenData(IDictionary<string, string> decodedToken)
+        {
+            if(decodedToken is null)
             {
                 _logger.LogError("Invalid token");
-                return new Result<string>(new AuthenticationException("Invalid token"));
+                return "Invalid token";
+            }
+
+            if(!decodedToken.TryGetValue("exp", out var exp) || !decodedToken.TryGetValue("username", out _))
+            {
+                _logger.LogError("Invalid token");
+                return "Invalid token";
             }
 
             if(DateTimeOffset.TryParse(exp, out var expiry) && DateTimeOffset.UtcNow > expiry)
             {
                 _logger.LogError("Token expired");
-                return new Result<string>(new AuthenticationException("Token expired"));
+                return "Token expired";
             }
 
-            if(_context.Tokens.Exists(x => x.TokenKey.Equals(token)))
+            return "";
+        }
+
+        public async Task<Result<string>> ValidateTokenAsync(string token, string personalKey)
+        {
+            var decodedToken = DecodeToken(token, personalKey);
+
+            if(ValidateTokenData(decodedToken) is string error && !string.IsNullOrEmpty(error))
             {
-                _logger.LogError("Token already used");
-                return new Result<string>(new AuthenticationException("Token already used"));
+                return new Result<string>(new AuthenticationException(error));
             }
+
+            if(decodedToken.TryGetValue("type", out var tokenType) && !tokenType.Equals("consumer_token"))
+            {
+                _logger.LogError("Invalid token");
+                return new Result<string>(new AuthenticationException("Invalid token"));
+            }
+
+            decodedToken.TryGetValue("exp", out var exp);
+            DateTimeOffset.TryParse(exp, out var expiry);
 
             _context.Tokens.Add(new Token(token, expiry));
             await _context.SaveChangesAsync();
 
-            return new Result<string>(GenerateToken(username, personalKey, 30));
+            return new Result<string>(GenerateToken(personalKey, "consumer_token", 30));
         }
 
         public async Task<Result<AuthResponse>> RefreshTokenAsync(string refreshToken, string personalKey)
         {
-            var decodedToken = new JwtBuilder()
-                .WithSecret(personalKey)
-                .MustVerifySignature()
-                .Decode<IDictionary<string, string>>(refreshToken);
+            var decodedToken = DecodeToken(refreshToken, personalKey);
 
-            if(decodedToken is null)
+            if(ValidateTokenData(decodedToken) is string error && !string.IsNullOrEmpty(error))
             {
-                _logger.LogError("Invalid token");
-                return new Result<AuthResponse>(new AuthenticationException("Invalid token"));
-            }
-
-            if(!decodedToken.TryGetValue("exp", out var exp) || !decodedToken.TryGetValue("username", out var username))
-            {
-                _logger.LogError("Invalid token");
-                return new Result<AuthResponse>(new AuthenticationException("Invalid token"));
-            }
-
-            if(DateTimeOffset.TryParse(exp, out var expiry) && DateTimeOffset.UtcNow > expiry)
-            {
-                _logger.LogError("Token expired");
-                return new Result<AuthResponse>(new AuthenticationException("Token expired"));
+                return new Result<AuthResponse>(new AuthenticationException(error));
             }
 
             if(_context.Tokens.Exists(x => x.TokenKey.Equals(refreshToken)))
@@ -134,11 +143,15 @@ namespace LiveOrderService.Infrastructure.Repositories
                 _logger.LogError("Token already used");
                 return new Result<AuthResponse>(new AuthenticationException("Token already used"));
             }
+            
+            decodedToken.TryGetValue("exp", out var exp);
+            DateTimeOffset.TryParse(exp, out var expiry);
 
             _context.Tokens.Add(new Token(refreshToken, expiry));
             await _context.SaveChangesAsync();
 
-            return new AuthResponse(GenerateToken(username, personalKey, 30), GenerateToken(username, personalKey, 60*4));
+            return new AuthResponse(GenerateToken(personalKey, "consumer_token", 30), 
+                                    GenerateToken(personalKey, "refresh_token", 60*4));
         }
     }
 }
