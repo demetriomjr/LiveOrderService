@@ -12,13 +12,11 @@ namespace LiveOrderService.src.Application.Users
         public async Task<Result<IEnumerable<UserResponseDto>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
             var result = await _userRepository.GetAllAsync();
-            
-            result.Match(
-                users =>  new Result<IEnumerable<UserResponseDto>>(users.Select(user => new UserResponseDto(user))),
+
+            return result.Match(
+                users => new Result<IEnumerable<UserResponseDto>>(users.Select(user => new UserResponseDto(user))),
                 error => new Result<IEnumerable<UserResponseDto>>(error)
             );
-
-            return new Result<IEnumerable<UserResponseDto>>( new Exception("An error occurred while fetching all users."));
         }
     }
 }

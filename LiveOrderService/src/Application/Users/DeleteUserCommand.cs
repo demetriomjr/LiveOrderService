@@ -11,13 +11,11 @@ namespace LiveOrderService.Application.Users
         public async Task<Result<bool>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var result = await _userRepository.DeleteAsync(request.Id);
-                
-            result.Match(
+
+            return result.Match(
                 _ => new Result<bool>(true),
                 ex => new Result<bool>(ex)
             );
-
-            return new Result<bool>(new Exception("An error has occured while trying to delete the user"));
         }
     }
 }
