@@ -1,6 +1,8 @@
 using LiveOrderService.Application.Authentication;
+using LiveOrderService.Application.Repositories;
 using LiveOrderService.Application.Users;
 using LiveOrderService.Common.Extensions;
+using LiveOrderService.Infrastructure.Repositories;
 using LiveOrderService.src.Application.Users;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddMediatR(typeof(Program).Assembly);
 builder.Services.AddDockerConfiguration();
+builder.Services.AddSingleton<IUserRepository, UserRepository>();
+builder.Services.AddSingleton<IAuthRepository, AuthRepository>();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
